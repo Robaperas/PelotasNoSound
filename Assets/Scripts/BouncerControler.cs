@@ -1,28 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-
-
-
-public class PlayerController : MonoBehaviour
+public class BouncerControler : MonoBehaviour
 {
-    
-    // properties of rigidbody (the sphere)
     private Rigidbody rb;
-    private float movementX, movementY;
     private AudioSource moviendo;
     private AudioSource golpe;
     private AudioSource[] sources;
-
+    
 
     public float speed = 5.0f;
     private float instspeed = 0;
     private float newpitch = 0;
-
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -30,15 +20,14 @@ public class PlayerController : MonoBehaviour
         sources = GetComponents<AudioSource>();
         moviendo = sources[0];
         golpe = sources[1];
-        }
-
+        
+    }
     void FixedUpdate() 
     {
-        rb.AddForce(new Vector3(movementX, 0.0f, movementY) * speed);
         instspeed = rb.velocity.magnitude;
         if(instspeed > 0)
         {
-            newpitch = (float)(1 + 0.5f * (1 - Mathf.Exp(-1*instspeed)));
+             newpitch = (float)(1 + 0.5f * (1 - Mathf.Exp(-1*instspeed)));
             moviendo.pitch = newpitch;
             if(!moviendo.isPlaying) moviendo.Play();
         }
@@ -52,16 +41,8 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-
-    void OnMove(InputValue movementValue) 
-    {
-        Vector2 movementVector = movementValue.Get<Vector2>();
-        movementX = movementVector.x; 
-        movementY = movementVector.y;
-    }
-    private void OnCollisionEnter(Collision collision)
+     private void OnCollisionEnter(Collision collision)
     {
         golpe.Play();
     }
-     
 }
